@@ -1,0 +1,4 @@
+headers = GLFW/glfw3.h
+
+compilerOpts = -IC:/msys64/mingw64/include
+linkerOpts = -LC:/msys64/mingw64/lib -lglfw3

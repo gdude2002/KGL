@@ -1,0 +1,4 @@
+headers = GL/glew.h GL/glut.h
+
+compilerOpts = -IC:/msys64/mingw64/include
+linkerOpts = -LC:/msys64/mingw64/lib -lglew32

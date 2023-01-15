@@ -1,0 +1,3 @@
+linkerOpts.linux = -lopengl
+linkerOpts.osx = -lopengl
+linkerOpts.mingw = -lopengl32
