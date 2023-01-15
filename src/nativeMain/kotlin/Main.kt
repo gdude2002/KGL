@@ -255,17 +255,13 @@ fun main() = memScoped {
 
 	println("DEBUG | Created & bound VAO & VBO")
 
-	val offset: IntVar = alloc()
-
-	offset.value = 0
-
 	glVertexAttribPointer!!(
 		0u,
 		3,
 		glew.GL_FLOAT.toUInt(),
 		glew.GL_FALSE.toUByte(),
 		3 * Float.SIZE_BYTES,
-		offset.ptr
+		null
 	)
 
 	glEnableVertexAttribArray!!(0u)
