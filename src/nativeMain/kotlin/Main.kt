@@ -236,8 +236,8 @@ fun main() = memScoped {
 
 	val vertexArray = arrayOf(
 		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
 	)
 
 	vertexArray.forEachIndexed(vertices::set)
@@ -301,5 +301,4 @@ fun main() = memScoped {
 }
 
 val CPointer<GLubyteVar>.string: String
-	get() =
-		reinterpret<ByteVar>().toKString()
+	get() = reinterpret<ByteVar>().toKString()
