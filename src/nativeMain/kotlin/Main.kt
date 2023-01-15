@@ -4,14 +4,14 @@ import glew.GLenum
 import glew.GLsizei
 import glew.GLubyteVar
 import glew.GLuint
+import glew.GLuintVar
 import glfw3.*
-import glfw3.GLuintVar
 import kotlinx.cinterop.*
 import platform.opengl32.glDrawArrays
 import platform.opengl32.glEnable
 
 const val VERTEX_SHADER = """
-#version 330 core
+#version 420 core
 layout (location = 0) in vec3 aPos;
 
 void main()
@@ -21,7 +21,7 @@ void main()
 """
 
 const val FRAGMENT_SHADER = """
-#version 330 core
+#version 420 core
 out vec4 FragColor;
 
 void main()
@@ -108,8 +108,8 @@ fun main() = memScoped {
 		return
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
 
 	if (Platform.osFamily == OsFamily.MACOSX) {
@@ -251,7 +251,13 @@ fun main() = memScoped {
 	glBindVertexArray!!(vao.value)
 
 	glBindBuffer!!(GL_ARRAY_BUFFER.toUInt(), vbo.value)
-	glBufferData!!(GL_ARRAY_BUFFER.toUInt(), vertexArray.size.toLong(), vertices, GL_STATIC_DRAW.toUInt())
+
+	glBufferData!!(
+		GL_ARRAY_BUFFER.toUInt(),
+		(vertexArray.size * Float.SIZE_BYTES).toLong(),
+		vertices,
+		GL_STATIC_DRAW.toUInt()
+	)
 
 	println("DEBUG | Created & bound VAO & VBO")
 
@@ -260,7 +266,7 @@ fun main() = memScoped {
 		3,
 		glew.GL_FLOAT.toUInt(),
 		glew.GL_FALSE.toUByte(),
-		3 * Float.SIZE_BYTES,
+		0,
 		null
 	)
 
@@ -274,7 +280,7 @@ fun main() = memScoped {
 	// region: Rendering
 
 	// Wireframe
-//	glew.glPolygonMode(glew.GL_FRONT_AND_BACK, glew.GL_LINE)
+	// glew.glPolygonMode(glew.GL_FRONT_AND_BACK, glew.GL_LINE)
 
 	while (glfwWindowShouldClose(window) != GLFW_TRUE) {
 		processInput(window)
