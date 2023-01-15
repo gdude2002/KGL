@@ -90,6 +90,8 @@ fun processInput(window: CPointer<GLFWwindow>) {
 }
 
 fun main() = memScoped {
+	// region: GLFW setup
+
 	glfwSetErrorCallback(staticCFunction(::handleGlfwError))
 
 	val glfwResult = glfwInit()
@@ -135,6 +137,10 @@ fun main() = memScoped {
 		glfw3.glViewport(0, 0, width, height)
 	})
 
+	// endregion
+
+	// region: GLEW setup
+
 	glewExperimental = glew.GL_TRUE.toUByte()
 
 	val glewResult = glewInit()
@@ -154,7 +160,11 @@ fun main() = memScoped {
 
 	glDebugMessageCallback?.let { it(staticCFunction(::handleOpenGlError), debugPtr.ptr) }
 
-	glfw3.glViewport(0, 0, 640, 480)
+	glew.glViewport(0, 0, 640, 480)
+
+	// endregion
+
+	// region: Vertex shader
 
 	val vertexShader: GLuint = glCreateShader!!(GL_VERTEX_SHADER.toUInt())
 
@@ -175,6 +185,10 @@ fun main() = memScoped {
 
 	println("DEBUG | Compiled vertex shader")
 
+	// endregion
+
+	// region: Fragment shader
+
 	val fragmentShader: GLuint = glCreateShader!!(GL_FRAGMENT_SHADER.toUInt())
 
 	println("DEBUG | Created fragment shader")
@@ -194,6 +208,10 @@ fun main() = memScoped {
 
 	println("DEBUG | Compiled fragment shader")
 
+	// endregion
+
+	// region: Finalize shaders
+
 	val shaderProgram: GLuint = glCreateProgram!!()
 
 	glAttachShader!!(shaderProgram, vertexShader)
@@ -208,7 +226,11 @@ fun main() = memScoped {
 	glDeleteShader!!(vertexShader)
 	glDeleteShader!!(fragmentShader)
 
-	println("DEBUG | Shaders deleted")
+	println("DEBUG | Shader objects deleted")
+
+	// endregion
+
+	// region: Vertices
 
 	val vertices = this.allocArray<FloatVar>(9)
 
@@ -251,6 +273,10 @@ fun main() = memScoped {
 	glBindBuffer!!(GL_ARRAY_BUFFER.toUInt(), 0u)
 	glBindVertexArray!!(0u)
 
+	// endregion
+
+	// region: Rendering
+
 	// Wireframe
 //	glew.glPolygonMode(glew.GL_FRONT_AND_BACK, glew.GL_LINE)
 
@@ -268,6 +294,8 @@ fun main() = memScoped {
 		glfwSwapBuffers(window)
 		glfwPollEvents()
 	}
+
+	// endregion
 
 	glDeleteVertexArrays!!(1, vao.ptr)
 	glDeleteBuffers!!(1, vbo.ptr)
